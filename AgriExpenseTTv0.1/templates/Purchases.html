@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/content/datepicker3.css" />
+    <title>Purchases</title>
+</head>
+<body ng-app="ExpenseApp">
+    <script src="/static/scripts/bootstrap.min.js"></script>
+    <script src="/static/scripts/angular.min.js"></script>
+    <script src="/static/scripts/lodash.min.js"></script>
+    <script src="/static/scripts/jquery-2.1.1.min.js"></script>
+    <script src="/static/scripts/expense.js"></script>
+    <script src="/static/scripts/bootstrap-datepicker.js"></script>
+    <script src="/static/scripts/typeahead.js"></script>
+
+    <!-- Navbar starts here -->
+
+    <div>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li><a href="{{ url_for('about') }}">About</a></li>
+                        <li><a href="{{ url_for('cycles') }}">Cycles</a></li>
+                        <li class="active"><a href="#">Purchases</a></li>
+                    </ul>
+               </div>
+        </div>
+    </div>
+
+    <!-- Navbar ends here -->
+
+    <!-- Container -->
+    <div class="container body-content" style="margin-top:70px">
+        <div class="row" ng-controller="PurchaseController">
+            <!-- form for submission -->
+            <div class="col-xs-5">
+                <form role="form" ng-submit="submit_purchase()">
+                    <fieldset>
+                        <h2>Please enter your purchases here</h2>
+
+
+                       
+
+                        <div class="form-group">
+                            <label for="resourceType">Resource Type</label>
+                            {% raw %}
+                            <select class="form-control" ng-model="resource_type"
+                                    ng-options="t for t in resource_types"></select>
+                            {% endraw %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="resourceName">Resource Name</label>
+                            {% raw %}
+                            <select class="form-control" ng-model="resource"
+                                    ng-options="r for r in resource_names[resource_type]"></select>
+                            {% endraw %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Quantfifier">Quantifer</label>
+                            {% raw %}
+                            <select id="Quantifier" class="form-control" ng-model="quantifier"
+                                    ng-options="q for q in quantifiers"></select>
+                            {% endraw %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Quantity">Quantity</label>
+                            {% raw %}
+                            <input type="number" ng-model="qty" id="Quantity" class="form-control" />
+                            {% endraw %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Cost">Cost</label>
+                            {% raw %}
+                            <input type="number" ng-model="cost" step="any" id="Cost" class="form-control" />
+                            {% endraw %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Date">Date of Purchase</label>
+                            {% raw %}
+                            <input data-provide="datepicker" id="date" class="form-control" ng-model="date" />
+                            {% endraw %}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input id="date" type="submit" class="btn btn-lg btn-success btn-block" value="Make Purchase">
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <!-- panel for viewing purchases -->
+            <div class="col-xs-5">
+                <div class="list-group">
+                    {% raw %}
+                    <div class="list-group-item"
+                         ng-repeat="purchase in purchases">
+                        <h3 class="list-group-item-heading">{{purchase.resourceName}}</h3>
+                        <p class="list-group-item-text">Quantity Left: {{purchase.qtyRemaining}}</p>
+                        <p class="list-group-item-text"></p>
+                    </div>
+                    {% endraw %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container ends-->
+
+</body>
+</html>

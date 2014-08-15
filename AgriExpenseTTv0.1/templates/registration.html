@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/content/login.css" />
+
+    
+   
+
+
+    <title>Registration</title>
+</head>
+<body ng-app="UserManagementApp">
+
+    <script src="/static/scripts/bootstrap.min.js"></script>
+    <script src="/static/scripts/angular.min.js"></script>
+    <script src="/static/scripts/lodash.min.js"></script>
+    <script src="/static/scripts/jquery-2.1.1.min.js"></script>
+    <script src="/static/scripts/UserAngularApp.js"></script>
+    <script src="/static/scripts/login.js"></script>
+    <div ng-controller="MyUserController" class="container">
+
+        <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                <form role="form" ng-submit="create_user()">
+                    <fieldset>
+                        <h2>Please fill in  your information</h2>
+                        <hr class="colorgraph">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input ng-model="firstName" name="firstName" id="firstName" class="form-control input-lg">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input ng-model="lastName" name="lastName" id="lastName" class="form-control input-lg">
+                        </div>
+                        <div class="form-group">
+                            <label for="county">County</label>
+                            {% raw %}
+                            <select class="form-control" ng-model="location" 
+                                    ng-options="loc for loc in locations">
+                            </select>
+                            {% endraw %}
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input ng-model="password" type="password" name="password" id="password" class="form-control input-lg">
+                        </div>
+                        <div class="form-group">
+                            <label for="retypePassword">Please retype password</label>
+                            <input ng-model="retypedPassword" type="password" name="retypePassword" id="retypePassword" class="form-control input-lg">
+                        </div>
+                        <hr class="colorgraph">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="submit" class="btn btn-lg btn-success btn-block" value="Register">
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>AgriExpenseTT - Desktop Version</title>
+    <link rel="stylesheet" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/content/datepicker3.css" />
+    <link rel="stylesheet" href="/static/content/buttons.css" />
+    <link rel="stylesheet" href="/static/content/app.css" />
+</head>
+<body ng-app="AgriExpenseTT">
+
+
+    <!-- Place all javascript files here -->
+
+    <script src="/static/scripts/bootstrap.min.js"></script>
+    <script src="/static/scripts/angular.min.js"></script>
+    <script src="/static/scripts/lodash.min.js"></script>
+    <script src="/static/scripts/jquery-2.1.1.min.js"></script>
+    <script src="/static/scripts/bootstrap-datepicker.js"></script>
+    <script src="/static/scripts/buckets.min.js"></script>
+
+    <script>
+
+
+        var app = angular.module('AgriExpenseTT', []);
+
+        // Manager of global state
+        app.service('GlobalService', function () {
+            var that = this;
+            this.base_url = "http://127.0.0.1:5555/";
+            this.user_id = -12;
+
+            this.generate_post_option = function (data, url) {
+
+                return {
+                    method: 'POST',
+                    data: data,
+                    url: url,
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                };
+
+            }
+        })
+
+        // Contoller to handle the switching of layouts
+        app.controller('LayoutController',['$scope', function ($scope) {
+            $scope.block = "menu";
+
+            // Stack to keep track of layout navigation
+            $scope.layout_history = new buckets.Stack();
+            $scope.layout_history.add("menu");
+
+            $scope.change_layout = function (layout_name) {
+                $scope.block = layout_name;
+                $scope.layout_history.ad(layout_name);
+            }
+
+            // Enables the user to go back to their previous page layout
+            $scope.go_back = function () {
+                if ($scope.layout_history.size() > 1) {
+                    var curr = $scope.layout_history.pop();
+                    $scope.change_layout($scope.layout_history.peek());
+                }
+            }
+
+        }]);
+
+        // Code to handle purchases
+        app.controller('PurchaseController', ['$scope', 'PurchaseInsertService',
+            function ($scope, PurchaseInsertService) {
+            // Code to represent the data model for purchases
+            $scope.resourceType = "";
+            $scope.resourceName = "";
+            $scope.qty = 0;
+            $scope.quantifier = "";
+            $scope.date = "";
+            $scope.cost = 0.0;
+
+            $scope.purchases = [];
+
+            // Code to handle the creation and the reading of puchase records
+
+            $scope.handle_submit_response = function (data) {
+                console.log(data);
+                $scope.purchases.push(data);
+            }
+
+            $scope.submit_purchase = function () {
+                PurchaseInsertService.insert_purchase($scope.resourceType, $scope.resourceName,
+                    $scope.qty, $scope.quantifier, $scope.cost, $scope.date, $scope.handle_submit_response);
+            }
+
+        }]);
+
+        // Service that writes purchases to the database
+        app.service('PurchaseInsertService', ['$http', 'GlobalService',
+            function ($http, GlobalService) {
+            var that = this;
+            this.url = GlobalService.base_url + "purchases/make";
+            this.insert_purchase = function (resourceType, resourceName, qty, quantifier, cost, date, resp) {
+                var data = $.param({
+                    userId: GlobalService.user_id,
+                    date: date,
+                    type: resourceType,
+                    cost: cost,
+                    qty: qty,
+                    quantifier: quantifier
+                });
+
+                $http(GlobalService.generate_post_option(data, url)).success(resp);
+               
+            }
+        }])
+
+        //Service that reads the purchases made by the user in the database
+
+    </script>
+
+
+    <!-- Place all html markup for application here -->
+    {% raw %}
+
+
+    <div class="row">
+
+
+        <div class=" container body-content">
+
+
+            <!-- From here we shall emply ng-switches to control the layout of
+                 the application-->
+            <div class="animate-switch-container main-container" ng-controller="LayoutController"
+                 ng-switch on="block">
+
+                <!-- This is the control menu for user to select their desired operations -->
+                <div class="animate-switch" ng-switch-when="menu">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <button type="button" ng-click="change_layout('make-purchase-stage-1')"
+                                    class="btn btn-fresh text-uppercase btn-lg">
+                                Make Purchases
+                            </button>
+                        </div>
+
+                       <div class="list-group-item">
+                           <button type="button" ng-click="change_layout('create-cycle-stage-1')"
+                                   class="btn btn-fresh text-uppercase btn-lg">
+                               Create Cycles
+                           </button>
+                       </div>
+
+                        <div class="list-group-item">
+                            <button type="button" class="btn btn-fresh text-uppercase btn-lg">
+                                Hire Labour
+                            </button>
+                        </div>
+
+                       <div class="list-group-item">
+                           <button type="button" class="btn btn-fresh text-uppercase btn-lg">
+                               Manage Resources
+                           </button>
+                       </div>
+                    </div>
+                </div>
+                <!-- end of menu -->
+
+                <!-- Code to handle the creating of purchases comes here -->
+
+                <div ng-controller="PurchaseController">
+                    <!-- To select type of resource to purchase -->
+                    <div class="animate-switch" ng-switch-when="make-purchase-stage-1">
+                        Put purchases
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    {% endraw %}
+
+
+</body>
+</html>

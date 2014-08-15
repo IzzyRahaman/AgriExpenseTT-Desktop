@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/content/login.css" />
+
+    <script src="/static/scripts/modernizr-2.6.2.js"></script>
+    <script src="/static/scripts/bootstrap.min.js"></script>
+    <script src="/static/scripts/angular.min.js"></script>
+    <script src="/static/scripts/lodash.min.js"></script>
+    <script src="/static/scripts/jquery-2.1.1.min.js"></script>
+    <script src="/static/scripts/login.js"></script>
+    <script src="/static/scripts/UserAngularApp.js"></script>
+    <title>Login</title>
+</head>
+<body ng-app="UserManagementApp">
+    
+    <div class="container" ng-controller="MyUserController">
+
+        <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                <form role="form" ng-submit="request_validation_for_user()">
+                    <fieldset>
+                        <h2>Please Sign In</h2>
+                        <hr class="colorgraph">
+                        <div class="form-group">
+                            <input ng-model="firstName" name="firstName" id="firstName" class="form-control input-lg" placeholder="First Name">
+                        </div>
+                        <div class="form-group">
+                            <input ng-model="lastName" name="lastName" id="lastName" class="form-control input-lg" placeholder="Last Name">
+                        </div>
+                        <div class="form-group">
+                            <input ng-model="password" type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
+                        </div>
+
+                        <hr class="colorgraph">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="submit" class="btn btn-lg btn-success btn-block" value="Sign In">
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <a href="{{url_for('registration')}}" class="btn btn-lg btn-primary btn-block">Register</a>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        </div>
+
+</body>
+</html>

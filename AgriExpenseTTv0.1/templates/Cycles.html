@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/static/content/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/content/datepicker3.css" />
+    <title>Cycles</title>
+</head>
+<body ng-app="ExpenseApp">
+
+    <script src="/static/scripts/bootstrap.min.js"></script>
+    <script src="/static/scripts/angular.min.js"></script>
+    <script src="/static/scripts/lodash.min.js"></script>
+    <script src="/static/scripts/jquery-2.1.1.min.js"></script>
+    <script src="/static/scripts/expense.js"></script>
+    <script src="/static/scripts/bootstrap-datepicker.js"></script>
+
+
+    <div>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li class="active"><a href="#">Cycles</a></li>
+                    <li><a href="{{url_for('purchases')}}">Purchases</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-controller="CycleController">
+        <div class="container body-content" style="margin-top:70px;">
+            <div class="col-sm-5">
+                <form role="form" ng-submit="submit_cycle()">
+                    {% raw %}
+                    <fieldset>
+
+                        <div class="form-group">
+
+                            <label for="Crop">Crop to be planted</label>
+                            <select id="Crop" ng-model="crop" class="form-control"
+                                    ng-options="c for c in crops"></select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="LandQuantifier">Land Quantifier</label>
+                            <select id="LandQuantifier" ng-model="quantifier" class="form-control"
+                                    ng-options="q for q in quantifiers"></select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="LandAmt">Amount of Land</label>
+                            <input type="number" step="any" id="LandAmt"
+                                   ng-model="amt" class="form-control" />
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label for="Date">Start of cycle</label>
+
+                            <input data-provide="datepicker" id="date" class="form-control" ng-model="date" />
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input id="date" type="submit" class="btn btn-lg btn-success btn-block" value="Create Crop Cycle">
+                            </div>
+                        </div>
+
+                    </fieldset>
+                    {% endraw %}
+                </form>
+            </div>
+
+
+            <div class="col-xs-5">
+
+                <div class="list-group">
+
+                    {% raw %}
+                    <div class="list-group-item"
+                         ng-repeat="cycle in cycles">
+                        <h3 class="list-group-item-heading">{{cycle.crop}}</h3>
+                        <p class="list-group-item-text">Land Used: {{cycle.landQty}} {{cycle.landQuantifier}}</p>
+                        <p class="list-group-item-text"></p>
+                    </div>
+                    {% endraw %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- panel for viewing purchases -->
+    
+
+</body>
+</html>
