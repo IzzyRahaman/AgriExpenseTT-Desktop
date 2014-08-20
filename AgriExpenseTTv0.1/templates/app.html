@@ -54,7 +54,8 @@
 
             $scope.change_layout = function (layout_name) {
                 $scope.block = layout_name;
-                $scope.layout_history.ad(layout_name);
+                $scope.layout_history.add(layout_name);
+                console.log(layout_name);
             }
 
             // Enables the user to go back to their previous page layout
@@ -70,15 +71,49 @@
         // Code to handle purchases
         app.controller('PurchaseController', ['$scope', 'PurchaseInsertService',
             function ($scope, PurchaseInsertService) {
-            // Code to represent the data model for purchases
+                // Code to represent the data model for purchases
+            /*
             $scope.resourceType = "";
             $scope.resourceName = "";
             $scope.qty = 0;
             $scope.quantifier = "";
             $scope.date = "";
-            $scope.cost = 0.0;
+            $scope.cost = 0.0; */
+
+                $scope.model = {
+                    resourceName: "",
+                    resourceType: "",
+                    qty: 0,
+                    quantifier: "",
+                    cost: 0.0,
+                    date: ""
+
+                };
+
+                $scope.set_prop = function (prop_name, prop_val) {
+                    $scope.model[prop_name] = prop_val;
+                    console.log('setting property ' + prop_name + ' as ' + prop_val);
+                };
+
 
             $scope.purchases = [];
+            $scope.types = ['Planting Materials', 'Fertilizers', 'Soil Amendments', 'Chemicals', 'Other'];
+            $scope.resources = {};
+            $scope.resources['Planting Materials'] = ["HOT PEPPER", "SWEET PEPPER", "PIGEON PEAS", "SOYABEAN – LEGUMES", "COCOA", "CITRUS",
+                          "COCONUT", "GOLDEN APPLE \\ POMMECYTHERE", "MANGO", "WATERMELON", "CASSAVA", "DASHEEN",
+                          "EDDOES","SWEET POTATO", "TANNIA", "YAM", "BROCCOLI", "CARROTS", "CABBAGE", "CAULIFLOWER",
+                          "CHRISTOPHENE", "EGGPLANT \\ MELONGENE", "ESCALLION \\ CHIVE", "LETTUCE",
+                          "ONIONS", "TOMATOES", 'CORN', "MALAY ROSE APPLE \\ POMMERAC"];
+            $scope.resources['Fertilizers'] = ["Fersan (7.12.40 + 1TEM)", "Magic Grow (7.12.40 + TE HYDROPHONIC)", "Hydro YARA Liva (15.0.15)", "Techni - Grow (7.12.27 + TE)",
+		"Ferqidd (10.13.32 + TE)", "Plant Prod (7.12.27 + TE)", "Flower Plus (9.18.36 + TE)", "Iron Chelate Powder (FE - EDTA)",
+		"Magnesium Sulphate (Mg SO4)", "12-24-12 FERTILIZER", "HARVEST MORE 10-55-10", "HARVEST MORE 13-0-44", "HARVEST MORE 5-5-45",
+		"NPK 12-12-17", "UREA 46-0-0", "PLANT BOOSTER", "MIRACLE GRO ALL PROPOSE PLANT FOOD", "SCOTTS FLOWER AND VEGETABLE PLANT FOOD"];
+            $scope.resources['Soil Amendments'] = ["Cow manure", "Compost", "Gypsum", "Limestone", "Sulphur", "Molasses", "Chicken manure", "Horse manure", "Calphos",
+		"Sharp sand"];
+            $scope.resources['Chemicals'] = ["Fungicide", "Insecticide", "Weedicide", "Algicides", "Antimicrobials", "Biopesticides", "Biocides", "Fumigants",
+		"Herbicides", "Miticides", "Microbial pesticides", "Molluscicides", "Nematicides", "Ovicides", "Pheromones",
+		"Repellents", "Rodenticides"];
+            $scope.units = ['Kg', 'Bags', 'Oz', 'Sticks', 'Seeds', 'Seedling'];
 
             // Code to handle the creation and the reading of puchase records
 
@@ -88,8 +123,7 @@
             }
 
             $scope.submit_purchase = function () {
-                PurchaseInsertService.insert_purchase($scope.resourceType, $scope.resourceName,
-                    $scope.qty, $scope.quantifier, $scope.cost, $scope.date, $scope.handle_submit_response);
+                console.log('Persisting the purchase');
             }
 
         }]);
@@ -115,6 +149,85 @@
         }])
 
         //Service that reads the purchases made by the user in the database
+
+        // Controller to handle the creation of a new cycle
+        app.controller('CycleCreationController', ['$scope', function ($scope) {
+            $scope.model = {
+                crop: "",
+                landQuantifier: "",
+                landQty: 0.0,
+                date: ""
+            };
+
+            $scope.units = ['Acres', 'Hectares'];
+            $scope.resources = ["HOT PEPPER", "SWEET PEPPER", "PIGEON PEAS", "SOYABEAN – LEGUMES", "COCOA", "CITRUS",
+                          "COCONUT", "GOLDEN APPLE \\ POMMECYTHERE", "MANGO", "WATERMELON", "CASSAVA", "DASHEEN",
+                          "EDDOES", "SWEET POTATO", "TANNIA", "YAM", "BROCCOLI", "CARROTS", "CABBAGE", "CAULIFLOWER",
+                          "CHRISTOPHENE", "EGGPLANT \\ MELONGENE", "ESCALLION \\ CHIVE", "LETTUCE",
+                          "ONIONS", "TOMATOES", 'CORN', "MALAY ROSE APPLE \\ POMMERAC"];
+
+            $scope.submit_cycle = function () {
+                console.log('Submitting new cycle');
+            };
+
+            $scope.update_model = function (prop_name, prop_val) {
+                $scope.model[prop_name] = prop_val;
+            };
+
+
+        }]);
+
+        // Controller to hire labour
+        app.controller('HireLabourController', ['$scope', function ($scope) {
+
+            $scope.model = {
+                resourceType: 'Labour',
+                resourceName: ''
+            };
+
+            $scope.update_model = function (prop_name, prop_val) {
+                $scope.model[prop_name] = prop_val;
+            };
+
+        }]);
+
+        app.service('CycleUsageService', ['$http', function ($http) {
+
+            var that = this;
+
+            this.submit_cycle_use = function (id, obj) {
+                
+            }
+
+        }]);
+
+        app.controller('ManageResourcesController', ['$scope', function ($scope) {
+            $scope.tab = "manage-cycles";
+            $scope.tabs = ["manage-cycles", "manage-purchases", "manage-resources"];
+            $scope.set_tab = function (tab) {
+                console.log('Setting the tab to ' + tab);
+                $scope.tabs.forEach(function (tab) {
+                    var elem = $('#' + tab).attr('class', 'btn btn-success');
+                });
+                $('#' + tab).attr('class', 'btn btn-primary');
+                $scope.tab = tab;
+            };
+
+            
+
+
+        }]);
+
+        app.controller('ManageDataController', ['$scope', function ($scope) {
+
+            $scope.tab = "selection";
+
+            $scope.set_tab = function (tab) {
+                console.log('Managing the data for ' + tab + ' tab');
+                $scope.tab = tab;
+            }
+
+        }]);
 
     </script>
 
@@ -145,9 +258,9 @@
                         </div>
 
                        <div class="list-group-item">
-                           <button type="button" ng-click="change_layout('create-cycle-stage-1')"
+                           <button type="button" ng-click="change_layout('cycle-stage-1')"
                                    class="btn btn-fresh text-uppercase btn-lg">
-                               Create Cycles
+                               Create New Cycle
                            </button>
                        </div>
 
@@ -158,25 +271,301 @@
                         </div>
 
                        <div class="list-group-item">
-                           <button type="button" class="btn btn-fresh text-uppercase btn-lg">
+                           <button type="button" ng-click="change_layout('manage-resources')"
+                                   class="btn btn-fresh text-uppercase btn-lg">
                                Manage Resources
                            </button>
                        </div>
+
+                        <div class="list-group-item">
+                            <button type="button" ng-click="change_layout('manage-data')"
+                                    class="btn btn-fresh text-uppercase btn-lg">
+                                Manage Data
+                            </button>
+                        </div>
+
+                        <div class="list-group-item">
+                            <button type="button" class="btn btn-fresh text-uppercase btn-lg">
+                                Generate Report
+                            </button>
+                        </div>
+
+                        <div class="list-group-item">
+                            <button type="button" class="btn btn-fresh text-uppercase btn-lg">
+                                Sync Data 
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <!-- end of menu -->
 
-                <!-- Code to handle the creating of purchases comes here -->
+                <!-- Code to handle the creation of purchases comes here -->
 
                 <div ng-controller="PurchaseController">
                     <!-- To select type of resource to purchase -->
                     <div class="animate-switch" ng-switch-when="make-purchase-stage-1">
-                        Put purchases
+                        <div class="list-group">
+                            <div class="list-group-item"
+                                 ng-repeat="type in types"
+                                 ng-click="change_layout(type + '-purchase'); set_prop('resourceType', type)">
+                                <div>{{type}}</div>
+                            </div>
+                        </div>
                     </div>
+
+                    
+                    <div ng-switch-when="Planting Materials-purchase">
+
+                        <div class="list-group">
+                            <div class="list-group-item"
+                                 ng-repeat="r in resources['Planting Materials']"
+                                 ng-click="change_layout('purchase-stage-3'); set_prop('resourceName', r)">
+                                {{r}}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div ng-switch-when="Fertilizers-purchase" >
+
+                        <div class="list-group">
+                            <div class="list-group-item"
+                                 ng-repeat="r in resources['Fertilizers']"
+                                 ng-click="change_layout('purchase-stage-3'); set_prop('resourceName', r)">
+                                {{r}}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div ng-switch-when="Soil Amendments-purchase">
+
+                        <div class="list-group">
+                            <div class="list-group-item"
+                                 ng-repeat="r in resources['Soil Amendments']"
+                                 ng-click="change_layout('purchase-stage-3'); set_prop('resourceName', r)">
+                                {{r}}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div ng-switch-when="Chemicals-purchase">
+
+                        <div class="list-group">
+                            <div class="list-group-item"
+                                 ng-repeat="r in resources['Chemicals']"
+                                 ng-click="change_layout('purchase-stage-3'); set_prop('resourceName', r)">
+                                {{r}}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div ng-switch-when="Other-purchase">
+                        
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="Name">Resource Name</label>
+                                    <input class="form-control" id="Name" type="text" ng-model="model.resourceName" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="Quantifier">Quantifier</label>
+                                    <input class="form-control" id="Quantifier" type="text" step="any" ng-model="model.quantifier" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="Number">Number of Units</label>
+                                    <input class="form-control" id="Number" type="number" step="any" ng-model="model.qty" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="Date">Date of Purchase</label>
+                                    <input data-provide="datepicker" id="Date" class="form-control" ng-model="date" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="Cost">Cost of all units</label>
+                                    <input class="form-control" id="Cost" type="number" step="any" ng-model="model.cost" />
+                                </div>
+                                <button ng-click="change_layout('menu'); submit_purchase()">Finish Purchase</button>
+                            </fieldset>
+                        </form>
+                    </div>
+
+                    <div ng-switch-when="purchase-stage-3">
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label>Quantifier</label>
+                                    <select class="form-control" ng-options="unit for unit in units" ng-model="model.quantifier"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Quantity</label>
+                                    <input type="number" step="any" ng-model="model.qty" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="Date">Date of Purchase</label>
+                                    <input data-provide="datepicker" id="Date" class="form-control" ng-model="date" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="Cost">Cost of all units</label>
+                                    <input class="form-control" id="Cost" type="number" step="any" ng-model="model.cost" />
+                                </div>
+                                <button ng-click="change_layout('menu'); submit_purchase()">Finish Purchase</button>
+                            </fieldset>
+                        </form>
+                    </div>
+
+                   
+                         
+
+                <!-- Finish the handling of the pucrchases -->
+
+
+                <!-- Code to handle the creation of cycles -->
+                <div>
+
+
+
                 </div>
+
+                <!-- Finish the creation of cycles -->
+
+
+                <!-- Code to hire labour -->
+
+                <div>
+
+                </div>
+
+                <!-- Finish hire labour-->
+
+                <!-- Code to manage data comes here -->
+                <div>
+
+                </div>
+                <!-- Finish management of data -->
 
             </div>
 
+                <!-- Finish -->
+
+                <!-- Code to handle the creation of purchases -->
+
+                <div ng-controller="CycleCreationController">
+
+                    <div class="animate-switch" 
+                         ng-switch-when="cycle-stage-1">
+                       <div class="list-group">
+                           <div class="list-group-item"
+                                ng-repeat="crop in resources"
+                                ng-click="update_model('resourceName', crop); change_layout('cycle-stage-2')">
+                               {{crop}}
+                           </div>
+                       </div>
+                    </div>
+
+                    <div class="animate-switch"
+                         ng-switch-when="cycle-stage-2">
+                        <div class="list-group">
+                            <div class="list-group-item"
+                                 ng-repeat="unit in units"
+                                 ng-click="update_model('landQuantifier', unit); change_layout('cycle-stage-3')">
+                                {{unit}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="animate-switch"
+                         ng-switch-when="cycle-stage-3">
+                        <form class="form-horizontal">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="Quantity">Quantity of land used</label>
+                                    <input type="number" step="any" ng-model="model.landQty" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="Date">Start of Cycle (Date)</label>
+                                    <input data-provide="datepicker" id="date" class="form-control" ng-model="date" />
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Finish -->
+
+                <!-- Hire Labour controller -->
+
+                <div ng-controller="HireLabourController">
+
+                </div>
+
+                <!-- Finish -->
+
+                <!-- Manage Resources -->
+
+                <div ng-controller="ManageResourcesController">
+
+
+                    <div ng-switch-when="manage-resources">
+
+                        <!-- Insert navbar here -->
+
+                        <div class="btn-group btn-group-justified">
+
+                            <a href id="manage-cycles" class="btn btn-primary"
+                               ng-click="set_tab('manage-cycles')">Cycles</a>
+                            <a href="#" id="manage-purchases" 
+                               class="btn btn-success"
+                               ng-click="set_tab('manage-purchases')">Purchases</a>
+                            <a href="#" id="manage-resources"
+                               class="btn btn-success"
+                               ng-click="set_tab('manage-resources')">Resources</a>
+
+
+                        </div>
+
+                        <!-- End the navbar here -->
+                        <div ng-switch on="tab">
+
+                            <div ng-switch-when="manage-cycles">
+                                Managing the cycles
+                            </div>
+
+                            <div ng-switch-when="manage-purchases">
+                                Managing the purchases
+                            </div>
+
+                            <div ng-switch-when="manage-resources">
+                                Managing the resources
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            
+                <!-- Finish -->
+
+                <!-- Code to manage the data -->
+
+
+                <div ng-controller="ManageDataController">
+
+                    <div ng-switch-when="manage-data">
+
+                    </div>
+
+                </div>
+
+
+                <!-- Finish -->
 
         </div>
 

@@ -63,6 +63,9 @@ def retrieve_all_user_specific_resources(user_id):
     resources = mongo.db.resources.find(resource_query)
     return resources
 
+
+
+
 def retrieive_all_nonspecific_resources():
     return retrieve_all_user_specific_resources(nonspecific_user_id)
 
