@@ -185,6 +185,8 @@
                 resourceName: ''
             };
 
+            $scope.labour_units = ['Hours', 'Days', 'Cycles'];
+
             $scope.update_model = function (prop_name, prop_val) {
                 $scope.model[prop_name] = prop_val;
             };
@@ -220,11 +222,43 @@
 
         app.controller('ManageDataController', ['$scope', function ($scope) {
 
-            $scope.tab = "selection";
+            $scope.tab = "data-selection";
+            $scope.tab2 = "edit-cycles";
+            $scope.types = ['Planting Materials', 'Fertilizers', 'Soil Amendments', 'Chemicals', 'Other'];
+            $scope.model = {};
+            $scope.buttons_tab = new buckets.Set();
+            $scope.buttons_tab.add('edit-cycles');
+            $scope.buttons_tab.add('edit-purchases');
 
             $scope.set_tab = function (tab) {
                 console.log('Managing the data for ' + tab + ' tab');
                 $scope.tab = tab;
+
+
+            }
+
+
+            $scope.set_tab2 = function (tab) {
+                console.log(tab);
+                console.log($scope.buttons_tab);
+                if ($scope.buttons_tab.contains(tab)) {
+                    $scope.buttons_tab.forEach(function (str) {
+                        console.log(str);
+                        $('#' + str).attr('class', 'btn btn-success');
+                    });
+                    $('#' + tab).attr('class', 'btn btn-primary');
+                }
+                $scope.tab2 = tab;
+
+
+            }
+
+            $scope.update_model = function (prop_name, prop_val) {
+                $scope.model[prop_name] = prop_val;
+            }
+
+            $scope.submit_new_resource = function () {
+                console.log('Sumbittng new resoure');
             }
 
         }]);
@@ -559,6 +593,79 @@
                 <div ng-controller="ManageDataController">
 
                     <div ng-switch-when="manage-data">
+
+                        <div ng-switch on="tab">
+
+
+                            <div ng-switch-when="data-selection">
+
+                                <div class="center-block btn-group-vertical">
+
+                                    <a href="#" class="btn btn-success"
+                                       ng-click="set_tab('add-data')">ADD DATA</a>
+                                    <a href="#" class="btn btn-success"
+                                       ng-click="set_tab('edit-data')">EDIT DATA</a>
+
+                                </div>
+
+                            </div>
+
+
+                            <div ng-switch-when="add-data">
+
+                                <div class="list-group">
+                                    <div class="list-group-item"
+                                         ng-repeat="type in types"
+                                         ng-click="update_model('type', type); set_tab('add-data-1')">
+                                        {{type}}
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            <div ng-switch-when="add-data-1">
+                                <form ng-submit="sumbit_new_resource()">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label for="ResourceName">Name of resource</label>
+                                            <input class="form-control" id="ResourceName" type="text" ng-model="model.resourceName" />
+                                        </div>
+                                        <input type="submit" value="Submit" />
+                                    </fieldset>
+                                </form>
+                            </div>
+
+
+                            <div ng-switch-when="edit-data">
+                                
+                                <div class="btn-group btn-group-justified">
+
+                                    <a href id="edit-cycles" class="btn btn-primary"
+                                       ng-click="set_tab2('edit-cycles')">Cycles</a>
+                                    <a href="#" id="edit-purchases"
+                                       class="btn btn-success"
+                                       ng-click="set_tab2('edit-purchases')">Purchases</a>
+                                    
+
+                                </div>
+
+                                <div ng-switch on="tab2">
+
+                                    <div ng-switch-when="edit-cycles">
+                                        Editing cycles
+                                    </div>
+
+                                    <div ng-switch-when="edit-purchases">
+                                        Editing purchases
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            
+
+                        </div>
 
                     </div>
 
