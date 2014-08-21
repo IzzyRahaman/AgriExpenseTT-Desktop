@@ -424,7 +424,11 @@
                                     <label for="Cost">Cost of all units</label>
                                     <input class="form-control" id="Cost" type="number" step="any" ng-model="model.cost" />
                                 </div>
-                                <button ng-click="change_layout('menu'); submit_purchase()">Finish Purchase</button>
+                                <div class="form-group">
+                                    <buttonn class="form-control btn btn-primary" ng-click="change_layout('menu'); submit_purchase()">
+                                        Finish Purchase
+                                    </buttonn>
+                                </div>
                             </fieldset>
                         </form>
                     </div>
@@ -438,7 +442,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Quantity</label>
-                                    <input type="number" step="any" ng-model="model.qty" />
+                                    <input class="form-control" type="number" step="any" ng-model="model.qty" />
                                 </div>
                                 <div class="form-group">
                                     <label for="Date">Date of Purchase</label>
@@ -448,7 +452,12 @@
                                     <label for="Cost">Cost of all units</label>
                                     <input class="form-control" id="Cost" type="number" step="any" ng-model="model.cost" />
                                 </div>
-                                <button ng-click="change_layout('menu'); submit_purchase()">Finish Purchase</button>
+                                <div class="form-group">
+                                    <button class="form-control"
+                                            ng-click="change_layout('menu'); submit_purchase()">
+                                        Finish Purchase
+                                    </button>
+                                </div>
                             </fieldset>
                         </form>
                     </div>
@@ -515,15 +524,18 @@
 
                     <div class="animate-switch"
                          ng-switch-when="cycle-stage-3">
-                        <form class="form-horizontal">
+                        <form class="form-horizontal" ng-submit="submit_cycle(); change_layout('menu')">
                             <fieldset>
                                 <div class="form-group">
                                     <label for="Quantity">Quantity of land used</label>
-                                    <input type="number" step="any" ng-model="model.landQty" />
+                                    <input class="form-control" type="number" step="any" ng-model="model.landQty" />
                                 </div>
                                 <div class="form-group">
                                     <label for="Date">Start of Cycle (Date)</label>
                                     <input data-provide="datepicker" id="date" class="form-control" ng-model="date" />
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary">Submit</button>
                                 </div>
                             </fieldset>
                         </form>
@@ -630,7 +642,11 @@
                                             <label for="ResourceName">Name of resource</label>
                                             <input class="form-control" id="ResourceName" type="text" ng-model="model.resourceName" />
                                         </div>
-                                        <input type="submit" value="Submit" />
+                                        <div class="form-group">
+                                            <button class="form-control btn btn-primary"
+                                                    ng-click="submit_new_resource(); change_layout('menu')"
+                                                    >Submit</button> 
+                                        </div>
                                     </fieldset>
                                 </form>
                             </div>
