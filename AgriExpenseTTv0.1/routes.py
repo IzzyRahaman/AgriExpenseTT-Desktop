@@ -121,14 +121,14 @@ def add_purchase():
         #        quantifier: quanitifier,
          #       qty_remaining: qty
     print request.form
-    user = request.form['user']
+    user = request.form['userId']
     date = request.form['date']
-    resource_type = request.form['type']
-    resource_name = request.form['name']
+    resource_type = request.form['resourceType']
+    resource_name = request.form['resourceName']
     qty = request.form['qty']
     cost = request.form['cost']
     quantifier = request.form['quantifier']
-    qty_remaining = request.form['qty_remaining']
+    qty_remaining = qty
     entry = persist.insert_purchase(user, resource_name, date, resource_type, quantifier,qty, qty_remaining, cost)
     print 'Successfuly loaded new purchase for user ', user 
     return json_util.dumps(entry);
