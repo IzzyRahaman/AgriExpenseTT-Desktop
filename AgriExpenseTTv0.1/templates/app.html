@@ -168,12 +168,25 @@
         }]);
 
         // Controller to hire labour
-        app.controller('HireLabourController', ['$scope', function ($scope) {
+        app.controller('HireLabourController', ['$scope', '$http', 'GlobalService',
+            function ($scope, $http, GlobalService) {
 
             $scope.model = {
                 resourceType: 'Labour',
                 resourceName: ''
             };
+
+            $scope.labourers = [];
+            $scope.get_url = "http://127.0.0.1:5555/resources/" + GlobalService.user_id;
+            $http.get($scope.get_url).success(function (data) {
+                $scope.labourers = _.filter(data, function (d) {
+                    return d.resourceType == 'labour'
+                });
+            });
+
+            $scope.set_worker = function (worker) {
+                $scope.model = worker;
+            }
 
             $scope.labour_units = ['Hours', 'Days', 'Cycles'];
 
@@ -309,7 +322,8 @@
                        </div>
 
                         <div class="list-group-item">
-                            <button type="button" class="btn btn-fresh text-uppercase btn-lg">
+                            <button type="button" ng-click="change_layout('hire-labour-stage-1')"
+                                    class="btn btn-fresh text-uppercase btn-lg">
                                 Hire Labour
                             </button>
                         </div>
@@ -560,6 +574,20 @@
                 <!-- Hire Labour controller -->
 
                 <div ng-controller="HireLabourController">
+
+                    <div ng-switch-when="hire-labour-stage-1">
+
+                        <div class="list-group">
+
+                            <div class="list-group-item"
+                                 ng-repeat="l in labourers"
+                                 ng-click="change_layout('hire-labour-stage-2'); set_worker(l)">
+                                {{l.resourceName}}
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
