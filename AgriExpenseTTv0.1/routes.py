@@ -98,6 +98,16 @@ def add_user():
     #persist.insert_user(firstName, lastName, county, password)
     return redirect('login.html')
 
+@app.route("/resources/new", methods=['POST'])
+def add_resource():
+    form = request.form
+    print request.form
+    user_id = form['userId']
+    resource_name = form['resourceName']
+    resource_type = form['resourceType']
+    resource = persist.insert_resource(user_id, resource_name, resource_type)
+    return json_util.dumps(resource)
+
 @app.route("/cycles/new", methods=['POST'])
 def add_cycle():
 

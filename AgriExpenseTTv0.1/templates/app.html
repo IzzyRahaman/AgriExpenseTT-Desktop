@@ -223,12 +223,16 @@
 
         }]);
 
-        app.controller('ManageDataController', ['$scope', function ($scope) {
+        app.controller('ManageDataController', ['$scope', '$http', 'GlobalService',
+            function ($scope, $http, GlobalService) {
 
             $scope.tab = "data-selection";
             $scope.tab2 = "edit-cycles";
-            $scope.types = ['Planting Materials', 'Fertilizers', 'Soil Amendments', 'Chemicals', 'Other'];
-            $scope.model = {};
+            $scope.types = ['Planting Materials', 'Fertilizers', 'Soil Amendments', 'Chemicals', 'Labour','Other'];
+            $scope.model = {
+                resourceName: "",
+                resourceType: ""
+            };
             $scope.buttons_tab = new buckets.Set();
             $scope.buttons_tab.add('edit-cycles');
             $scope.buttons_tab.add('edit-purchases');
@@ -262,6 +266,14 @@
 
             $scope.submit_new_resource = function () {
                 console.log('Sumbittng new resoure');
+                console.log($scope.model);
+                console.log($.param($scope.model));
+                var url = "http://127.0.0.1:5555/resources/new";
+                var req = GlobalService.generate_post_option($scope.model, url);
+                $http(req).success(function (data) {
+                    console.log('Persisted ' + data);
+
+                })
             }
 
         }]);
@@ -669,7 +681,7 @@
                                 <div class="list-group">
                                     <div class="list-group-item"
                                          ng-repeat="type in types"
-                                         ng-click="update_model('type', type); set_tab('add-data-1')">
+                                         ng-click="update_model('resourceType', type); set_tab('add-data-1')">
                                         {{type}}
                                     </div>
                                 </div>
@@ -677,7 +689,7 @@
                             </div>
 
                             <div ng-switch-when="add-data-1">
-                                <form ng-submit="sumbit_new_resource()">
+                                <form class="form-horizontal">
                                     <fieldset>
                                         <div class="form-group">
                                             <label for="ResourceName">Name of resource</label>

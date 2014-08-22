@@ -52,8 +52,8 @@ def retrieve_resource_types():
 def insert_resource(user_id, resource_name, resource_type):
     resource = {}
     resource['userId'] = user_id
-    resource['type'] = resource_type
-    resource['resource_name'] = resource_name
+    resource['resourceType'] = resource_type
+    resource['resourceName'] = resource_name
     mongo.db.resources.insert(resource)
 
 
