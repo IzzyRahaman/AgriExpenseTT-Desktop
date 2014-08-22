@@ -83,6 +83,12 @@ def insert_purchase(user_id, resource_name, date, resource_type, quantifier, qty
     mongo.db.purchases.insert(purchase)
     return purchase
 
+def edit_purchase(id, resource_name, date, resource_type, quantifier, qty, cost):
+    purchase = {'date': date, 'resourceName' : resource_name, 'resourceType' : resource_type}
+    purchase.update({'quantifier': quantifier, 'qty' : qty, 'cost' : cost})
+    setter = {'$set' : purchase}
+    mongo.db.purchases.update({'_id': id}, setter)
+
 def retrieve_resources(user_id):
     resources = retrieive_all_nonspecific_resources()
     resources.extend(retrieve_all_user_specific_resources(user_id))

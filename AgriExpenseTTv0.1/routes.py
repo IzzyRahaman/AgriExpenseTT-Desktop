@@ -156,3 +156,8 @@ def edit_cycle(id):
     persist.edit_cycle(id, request.form['crop'], request.form['landQuantifier'], request.form['landQty'], request.form['date'])
 
 
+@app.route("/purchases/update/id", methods=['PUT'])
+def edit_purchase(id):
+    print request.form
+    form = request.form
+    persist.edit_purchase(id, form['resourceName'], form['date'], form['resourceType'], form['quantifier'], form['qty'], form['cost'])
