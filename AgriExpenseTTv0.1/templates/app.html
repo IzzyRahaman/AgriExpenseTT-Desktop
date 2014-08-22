@@ -179,6 +179,7 @@
             $scope.labourers = [];
             $scope.get_url = "http://127.0.0.1:5555/resources/" + GlobalService.user_id;
             $http.get($scope.get_url).success(function (data) {
+                console.log('Received data')
                 $scope.labourers = _.filter(data, function (d) {
                     return d.resourceType == 'labour'
                 });
@@ -272,8 +273,9 @@
                 var req = GlobalService.generate_post_option($scope.model, url);
                 $http(req).success(function (data) {
                     console.log('Persisted ' + data);
-
-                })
+                   
+                });
+                $scope.tab = "data-selection";
             }
 
         }]);

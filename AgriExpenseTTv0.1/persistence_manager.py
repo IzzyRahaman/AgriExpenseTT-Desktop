@@ -65,7 +65,9 @@ def retrieve_all_user_specific_resources(user_id):
     resources = []
     resource_query = {'userId': user_id}
     resources = mongo.db.resources.find(resource_query)
-    return resources
+    if resources:
+        return resources
+    return []
 
 
 
