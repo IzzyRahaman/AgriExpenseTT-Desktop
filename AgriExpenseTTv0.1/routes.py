@@ -142,3 +142,10 @@ def add_purchase():
     entry = persist.insert_purchase(user, resource_name, date, resource_type, quantifier,qty, qty_remaining, cost)
     print 'Successfuly loaded new purchase for user ', user 
     return json_util.dumps(entry);
+
+# ------------------------------ PUT requests to update the data -------------------------------------------------
+
+@app.route('/resources/update/<id>', methods=['PUT'])
+def edit_resource(id):
+    print request.form
+    persist.edit_resource(id, request.form['resourceName'], request.form['resourceType'])

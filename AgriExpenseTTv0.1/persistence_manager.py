@@ -56,6 +56,10 @@ def insert_resource(user_id, resource_name, resource_type):
     resource['resourceName'] = resource_name
     mongo.db.resources.insert(resource)
 
+def edit_resource(resource_id, resource_name, resource_type):
+    setter = {"$set": {"resourceName" : resource_name, "resourceType" : resource_type}}
+    mongo.db.resources.update({'_id' : resource_id}, setter)
+
 
 def retrieve_all_user_specific_resources(user_id):
     resources = []
