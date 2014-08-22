@@ -103,6 +103,10 @@ def insert_cycle(user_id, crop, land_quantifier, land_qty, date):
     mongo.db.cycles.insert(cycle)
     return cycle
 
+def edit_cycle(cycle_id, crop, land_quantifier, land_qty, date):
+    setter = {'$set': {'landQty': land_qty, 'landQuantifier': land_quantifier, 'crop': crop, 'date': date}}
+    mongo.db.cycles.update({'_id' : cycle_id}, setter)
+
 def retrieve_cycles_by_user(user_id):
     cycles = []
     cycles = mongo.db.cycles.find({'userId' : user_id})
