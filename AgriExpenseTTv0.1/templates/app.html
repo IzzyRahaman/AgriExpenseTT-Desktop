@@ -135,7 +135,8 @@
         //Service that reads the purchases made by the user in the database
 
         // Controller to handle the creation of a new cycle
-        app.controller('CycleCreationController', ['$scope', function ($scope) {
+        app.controller('CycleCreationController', ['$scope', 'GlobalService',
+            function ($scope, GlobalService) {
             $scope.model = {
                 crop: "",
                 landQuantifier: "",
@@ -152,6 +153,11 @@
 
             $scope.submit_cycle = function () {
                 console.log('Submitting new cycle');
+                var req = GlobalService.generate_post_option($scope.model, 'http://127.0.0.1:5555/cycles/new');
+                $http(req).success(function (data) {
+                    console.log('Received ' + data);
+
+                });
             };
 
             $scope.update_model = function (prop_name, prop_val) {

@@ -107,14 +107,14 @@ def retrieve_cycles_by_user(user_id):
 
 def insert_cycle_use(user_id, cycle_id, purchase_id, quantifier, amt_used, cost_of_use,
                      resource_type, date):
-    use = {'usedId' : user_id, 'cycleId': cycle_id, 'purchaseId' : purchase_id, 'quantifier' : quantifier}
+    use = {'userId' : user_id, 'cycleId': cycle_id, 'purchaseId' : purchase_id, 'quantifier' : quantifier}
     use.update({'amountUsed' : amt_used, 'costOfUse' : cost_of_use, 'resourceType' : resource_type})
     use.update({'date': date})
     mongo.db.uses.insert(use)
 
 def retrieve_uses_by_user(user_id):
     uses = []
-    uses = mongo.db.uses.find(uses)
+    uses = mongo.db.uses.find({'userId' : user_id})
     return uses
 
 

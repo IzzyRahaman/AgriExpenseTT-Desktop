@@ -104,8 +104,8 @@ def add_cycle():
     print request.form
     user_id = request.form['userId']
     crop = request.form['crop']
-    landQuantifier = request.form['quantifier']
-    landQty = request.form['amt']
+    landQuantifier = request.form['landQuantifier']
+    landQty = request.form['landQty']
     date = request.form['date']
     cycle = persist.insert_cycle(user_id, crop, landQuantifier, landQty, date)
     return json_util.dumps(cycle)
